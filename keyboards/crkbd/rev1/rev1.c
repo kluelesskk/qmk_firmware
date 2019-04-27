@@ -55,13 +55,14 @@ void led_set_kb(uint8_t usb_led) {
  *      |                    {x=0..224,     y=0..64} physical layout
  *      |                            |           |     modifier
  *      |                            |           |   */
-#define RGB_MATRIX_LEFT_LEDS  \
+#define RGB_MATRIX_LEFT_LEDS_BACK  \
     { { 0xFF           }, {  85, 16 }, 0 }, /*  1 */ \
     { { 0xFF           }, {  50, 13 }, 0 }, /*  2 */ \
     { { 0xFF           }, {  16, 20 }, 0 }, /*  3 */ \
     { { 0xFF           }, {  16, 38 }, 0 }, /*  4 */ \
     { { 0xFF           }, {  50, 48 }, 0 }, /*  5 */ \
-    { { 0xFF           }, {  85, 52 }, 0 }, /*  6 */ \
+    { { 0xFF           }, {  85, 52 }, 0 }, /*  6 */
+#define RGB_MATRIX_LEFT_LEDS_FRONT  \
     { { 3 | ( 5 << 4 ) }, {  95, 63 }, 1 }, /*  7 */ \
     { { 2 | ( 5 << 4 ) }, {  85, 39 }, 0 }, /*  8 */ \
     { { 1 | ( 5 << 4 ) }, {  85, 21 }, 0 }, /*  9 */ \
@@ -84,13 +85,14 @@ void led_set_kb(uint8_t usb_led) {
     { { 1 | ( 0 << 4 ) }, {   0, 24 }, 1 }, /* 26 */ \
     { { 2 | ( 0 << 4 ) }, {   0, 41 }, 1 }, /* 27 */
 
-#define RGB_MATRIX_RIGHT_LEDS  \
+#define RGB_MATRIX_RIGHT_LEDS_BACK  \
     { { 0xFF           }, { 139, 16 }, 0 }, /*  1 */ \
     { { 0xFF           }, { 174, 13 }, 0 }, /*  2 */ \
     { { 0xFF           }, { 208, 20 }, 0 }, /*  3 */ \
     { { 0xFF           }, { 208, 38 }, 0 }, /*  4 */ \
     { { 0xFF           }, { 174, 48 }, 0 }, /*  5 */ \
-    { { 0xFF           }, { 139, 52 }, 0 }, /*  6 */ \
+    { { 0xFF           }, { 139, 52 }, 0 }, /*  6 */
+#define RGB_MATRIX_RIGHT_LEDS_FRONT  \
     { { 7 | ( 5 << 4 ) }, { 129, 63 }, 1 }, /*  7 */ \
     { { 6 | ( 5 << 4 ) }, { 139, 39 }, 0 }, /*  8 */ \
     { { 5 | ( 5 << 4 ) }, { 139, 21 }, 0 }, /*  9 */ \
@@ -115,13 +117,37 @@ void led_set_kb(uint8_t usb_led) {
 
 #ifdef RGB_MATRIX_SPLIT_RIGHT
 const rgb_led g_rgb_leds[DRIVER_LED_TOTAL] = {
-        RGB_MATRIX_RIGHT_LEDS
-        RGB_MATRIX_LEFT_LEDS
+#if DRIVER_LED_TOTAL == 54
+        RGB_MATRIX_RIGHT_LEDS_BACK
+        RGB_MATRIX_RIGHT_LEDS_FRONT
+        RGB_MATRIX_LEFT_LEDS_BACK
+        RGB_MATRIX_LEFT_LEDS_FRONT
+#elif DRIVER_LED_TOTAL == 42
+        RGB_MATRIX_RIGHT_LEDS_FRONT
+        RGB_MATRIX_LEFT_LEDS_FRONT
+#elif DRIVER_LED_TOTAL == 12
+        RGB_MATRIX_RIGHT_LEDS_BACK
+        RGB_MATRIX_LEFT_LEDS_BACK
+#else
+#error Unexpected number of LEDs
+#endif
     };
 #else
 const rgb_led g_rgb_leds[DRIVER_LED_TOTAL] = {
-        RGB_MATRIX_LEFT_LEDS
-        RGB_MATRIX_RIGHT_LEDS
+#if DRIVER_LED_TOTAL == 54
+        RGB_MATRIX_LEFT_LEDS_BACK
+        RGB_MATRIX_LEFT_LEDS_FRONT
+        RGB_MATRIX_RIGHT_LEDS_BACK
+        RGB_MATRIX_RIGHT_LEDS_FRONT
+#elif DRIVER_LED_TOTAL == 42
+        RGB_MATRIX_LEFT_LEDS_FRONT
+        RGB_MATRIX_RIGHT_LEDS_FRONT
+#elif DRIVER_LED_TOTAL == 12
+        RGB_MATRIX_LEFT_LEDS_BACK
+        RGB_MATRIX_RIGHT_LEDS_BACK
+#else
+#error Unexpected number of LEDs
+#endif
     };
 #endif
 
